@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ethereum-dev
+
+resources:
+  - ../../base
+
+patches:
+  - path : values.yaml
+    target:
+      kind: HelmRelease
+      name: ethereum-node
+
+labels:
+  - pairs:
+      environment: development
+      tier: frontend
+
+commonAnnotations:
+  alert-level: low
+  auto-scaling: disabled 

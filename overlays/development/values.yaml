@@ -1,0 +1,60 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ethereum-node
+
+spec:
+  values:
+    # Use TESTNET instead of mainnet
+    network: goerli
+    
+    executionLayer:
+      # Keep 1 replica (HA not needed for dev)
+      replicas: 1
+      
+      # REDUCED resources for dev environment
+      resources:
+        requests:
+          memory: "4Gi"       # Half of base (8Gi)
+          cpu: "1000m"        # Half of base (2000m)
+        limits:
+          memory: "8Gi"       # Half of base (16Gi)
+          cpu: "2000m"        # Half of base (4000m)
+      
+      # Smaller storage for testnet
+      storage:
+        size: 200Gi           # Much smaller than base 1Ti
+        storageClass: standard  # Cheaper storage tier
+      
+      # Development-specific CLI flags
+      extraArgs:
+        - --syncmode=snap      # Faster sync for dev (snap = sync snapshot)
+        - --maxpeers=30        # Fewer peers (resources limited)
+        - --cache=2048         # 2GB cache (base might use more)
+        - --http              # Enable HTTP API for local testing
+        - --http.api=eth,net,web3,txpool,debug  # FULL APIs for debugging
+        - --http.addr=0.0.0.0  # Listen on all interfaces
+        - --http.vhosts=*      # Allow all hosts (development)
+        - --http.corsdomain=*  # Allow all CORS origins (development)
+    
+    consensusLayer:
+      replicas: 1
+      resources:
+        requests:
+          memory: "2Gi"        # Reduced from base 4Gi
+          cpu: "500m"          # Reduced from base 1000m
+        limits:
+          memory: "4Gi"        # Reduced from base 8Gi
+          cpu: "1000m"         # Reduced from base 2000m
+      
+      storage:
+        size: 50Gi             # Goerli consensus is ~50GB
+        storageClass: standard
+    
+    # No validator in dev (obviously!)
+    validator:
+      enabled: false
+    
+    # Monitoring enabled even in dev (practice for prod)
+    monitoring:
+      enabled: true
