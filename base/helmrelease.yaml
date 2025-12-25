@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata: 
   name: ethereum-node
-  namespace: ethereum
 spec: 
   interval: 10m
   timeout: 30m

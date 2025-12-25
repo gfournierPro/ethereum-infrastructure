@@ -1,0 +1,56 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ethereum-node
+spec:
+  values:
+    network: sepolia
+    
+    monitoring:
+      enabled: true  # ✅ You have Prometheus installed now!
+    
+    executionLayer:
+      enabled: true
+      replicas: 1
+      image:
+        repository: ethereum/client-go
+        tag: v1.16.7
+      resources:
+        requests:
+          cpu: 500m      # ✅ Reduced for local dev
+          memory: 2Gi    # ✅ Reduced for local dev
+        limits:
+          cpu: 1000m
+          memory: 4Gi
+      storage:
+        size: 50Gi
+        storageClass: local-path  # ✅ Changed from "standard"
+      extraArgs:
+        - --syncmode=snap
+        - --maxpeers=30
+        - --cache=2048
+        - --http
+        - --http.api=eth,net,web3,txpool,debug
+        - --http.addr=0.0.0.0
+        - --http.vhosts=*
+        - --http.corsdomain=*
+    
+    consensusLayer:
+      enabled: true
+      replicas: 1
+      image:
+        repository: sigp/lighthouse
+        tag: v4.5.0
+      resources:
+        requests:
+          cpu: 250m      # ✅ Reduced for local dev
+          memory: 1Gi    # ✅ Reduced for local dev
+        limits:
+          cpu: 500m
+          memory: 2Gi
+      storage:
+        size: 20Gi
+        storageClass: local-path  # ✅ Changed from "standard"
+    
+    validator:
+      enabled: false

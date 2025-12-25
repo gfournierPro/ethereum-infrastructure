@@ -4,19 +4,21 @@ kind: Kustomization
 namespace: ethereum-dev
 
 resources:
-  - ../../base
+- ../../base
 
 patches:
-  - path : values.yaml
-    target:
-      kind: HelmRelease
-      name: ethereum-node
+- path: values.yaml
+  target:
+    kind: HelmRelease
+    name: ethereum-node
+- path: helmrelease-patch.yaml
 
 labels:
-  - pairs:
-      environment: development
-      tier: frontend
+- pairs:
+    environment: development
+    tier: frontend
 
 commonAnnotations:
   alert-level: low
-  auto-scaling: disabled 
+  auto-scaling: disabled
+

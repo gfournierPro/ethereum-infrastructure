@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - helmrelease.yaml
   - chart-gitrepository.yaml
+  - monitoring.yaml
 
 namespace: ethereum
 
