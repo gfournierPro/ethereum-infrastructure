@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ethereum-node-consensus
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: copy-jwt  # Disable problematic init container
+        image: busybox
+        command:
+        - sh
+        - -c
+        - echo "JWT already mounted - skipping copy"
+      containers:
+      - name: lighthouse
+        command:
+        - lighthouse
+        - beacon_node
+        - --network=sepolia
+        - --execution-endpoint=http://ethereum-node-execution:8551
+        - --execution-jwt=/jwt/jwt.hex
+        - --datadir=/data

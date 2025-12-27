@@ -48,21 +48,29 @@ spec:
       retries: 3
   values:
     consensusLayer:
+      command:
+      - lighthouse
+      - beacon_node
+      - --network=sepolia
+      - --execution-endpoint=http://ethereum-node-execution:8551
+      - --execution-jwt=/jwt/jwt.hex
+      - --datadir=/data
       enabled: true
+      extraArgs: []
       image:
         repository: sigp/lighthouse
         tag: v4.5.0
       replicas: 1
       resources:
         limits:
-          cpu: 1000m
-          memory: 4Gi
-        requests:
           cpu: 500m
           memory: 2Gi
+        requests:
+          cpu: 250m
+          memory: 1Gi
       storage:
-        size: 50Gi
-        storageClass: standard
+        size: 20Gi
+        storageClass: local-path
     executionLayer:
       enabled: true
       extraArgs:
@@ -80,22 +88,56 @@ spec:
       replicas: 1
       resources:
         limits:
-          cpu: 2000m
-          memory: 8Gi
-        requests:
           cpu: 1000m
           memory: 4Gi
+        requests:
+          cpu: 500m
+          memory: 2Gi
         storage:
           size: 1Ti
           storageClass: fast-ssd
       storage:
-        size: 200Gi
-        storageClass: standard
+        size: 50Gi
+        storageClass: local-path
     monitoring:
       enabled: true
-    network: goerli
+    network: sepolia
     validator:
       enabled: false
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  annotations:
+    alert-level: low
+    auto-scaling: disabled
+    documentation: https://github.com/gfournierPro/ethereum-infrastructure
+    maintained-by: gabiwax@gabiwax.com
+  labels:
+    app: ethereum-node
+    component: blockchain-infrastruscture
+    environment: development
+    tier: frontend
+  name: kube-prometheus-stack
+  namespace: ethereum-dev
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      interval: 5m
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+      version: '>=45.0.0'
+  interval: 10m
+  values:
+    grafana:
+      adminPassword: testadmindev
+      enabled: true
+    prometheus:
+      prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
@@ -117,3 +159,22 @@ spec:
   ref:
     branch: main
   url: https://github.com/gfournierPro/ethereum-node-helm
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  annotations:
+    alert-level: low
+    auto-scaling: disabled
+    documentation: https://github.com/gfournierPro/ethereum-infrastructure
+    maintained-by: gabiwax@gabiwax.com
+  labels:
+    app: ethereum-node
+    component: blockchain-infrastruscture
+    environment: development
+    tier: frontend
+  name: prometheus-community
+  namespace: ethereum-dev
+spec:
+  interval: 1h
+  url: https://prometheus-community.github.io/helm-charts

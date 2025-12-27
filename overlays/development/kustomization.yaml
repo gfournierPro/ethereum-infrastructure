@@ -12,6 +12,11 @@ patches:
     kind: HelmRelease
     name: ethereum-node
 - path: helmrelease-patch.yaml
+- path: statefulset-patch.yaml  # Add this
+  target:
+    kind: StatefulSet
+    name: ethereum-node-consensus
+
 
 labels:
 - pairs:

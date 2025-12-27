@@ -6,7 +6,7 @@ metadata:
 spec:
   values:
     # Use TESTNET instead of mainnet
-    network: goerli
+    network: sepolia
     
     executionLayer:
       # Keep 1 replica (HA not needed for dev)

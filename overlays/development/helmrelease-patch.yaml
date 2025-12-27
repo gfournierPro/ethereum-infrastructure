@@ -51,6 +51,15 @@ spec:
       storage:
         size: 20Gi
         storageClass: local-path  # ✅ Changed from "standard"
-    
+
+      command:
+        - lighthouse
+        - beacon_node
+        - --network=sepolia
+        - --execution-endpoint=http://ethereum-node-execution:8551
+        - --execution-jwt=/jwt/jwt.hex  # ✅ FIXED: --execution-jwt not --jwt-secret
+        - --datadir=/data
+      extraArgs: []  # Reset any chart defaults
+
     validator:
       enabled: false
