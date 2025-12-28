@@ -1,0 +1,13 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: ethereum-node-jwt
+  namespace: ethereum-dev
+spec:
+  encryptedData:
+    jwt.hex: AgCh91C+Zpr7kEjQLShINnTfv11Y492ZhZkEroUPvRm7HSvD10tiUiNMjd+UmFqHRqUhCc98eUt7RVvhDbhFiPsIh5eJBGA/n0NXon1XJXMjhUMptEwDd//5VJgRlvBpi18IOOcX+UY069irWWJShI/bhBLagiWA2X9zcvzx5rThw6CQ0te0+bA/DBT5ND4NAzH1BSFpK5sK/SKU2H5lAraYrroJIVTG1f+ZzItfrFiYlODm4Hh8m0cjEVqoqmbFpqk9R49z3+IqbpfBCmLVOVnXszRzG8vQR+gGcet+fKDonrSp8y4ZYBacVoOYhfixqJ+9vltzwmPV6fuIzW6jAe8Ot1gmdgCFyBVB0ARURK2Drlg29f/kgywXqtlhHBai6Rmmv3YMGc2xe1U784Yjna23ZTIOcwt9trZ5mOLLdb12m8/aa4TdJ7Px1A9vPBeM2com1q9gKPSkLFAvsuesze5oUX+iSCHJwuDpj1IFPV3NC/Qw/5EYm1sOaY1SoN1bawYcgJ1gd5+N8U5FqPr45QkQ+G4ayflYDwleabfpVZHFaN6rlCZ1hcUaZtfyXRjDHZ3TM7AuR35E16AcjJ/vBv99S1BhpT6TUm3NurnThrKoi/4T8qvPaT1wdbtOnEH7EFMkiUe+xOd1WMojSb3DtVtiF/GcXeHV30Fq6C0M37M4CFcpdNK8CWDB1QXXweKt5IgT3t9opAGS6LGEtgZWBFmLOneNDvWWakAsGyeANwm5SPxzHayk4I+sgGO8SuQtqI/x/ejNScs40HqkIXNePx+z
+  template:
+    metadata:
+      name: ethereum-node-jwt
+      namespace: ethereum-dev
