@@ -5,6 +5,7 @@ namespace: ethereum-dev
 
 resources:
 - ../../base
+- ethereum-node-jwt-sealed.yaml
 
 patches:
 - path: values.yaml

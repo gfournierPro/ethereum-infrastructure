@@ -58,3 +58,7 @@ spec:
     # Monitoring enabled even in dev (practice for prod)
     monitoring:
       enabled: true
+
+    jwt:
+      # Use the sealed secret instead of generating one
+      existingSecret: "ethereum-node-jwt"
