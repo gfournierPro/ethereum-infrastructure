@@ -24,7 +24,7 @@ spec:
       # Smaller storage for testnet
       storage:
         size: 200Gi           # Much smaller than base 1Ti
-        storageClass: standard  # Cheaper storage tier
+        storageClass: local-path  # Cheaper storage tier
       
       # Development-specific CLI flags
       extraArgs:
@@ -49,7 +49,7 @@ spec:
       
       storage:
         size: 50Gi             # Goerli consensus is ~50GB
-        storageClass: standard
+        storageClass: local-path
     
     # No validator in dev (obviously!)
     validator:
